@@ -129,6 +129,8 @@ class Isso(object):
             urls.add(rule)
 
         for func, (method, rule) in [
+            ('auth_signin',    ('GET', '/auth/signin/<string:provider>')),
+            ('auth_callback',    ('GET', '/auth/callback/<string:provider>')),
             ('fetch',   ('GET', '/')),
             ('new',     ('POST', '/new')),
             ('count',   ('POST', '/count')),

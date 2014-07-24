@@ -4,12 +4,16 @@ from __future__ import unicode_literals
 
 import cgi
 import functools
+import json
 
 from itsdangerous import SignatureExpired, BadSignature
 
 from werkzeug.http import dump_cookie
 from werkzeug.wrappers import Response
 from werkzeug.exceptions import BadRequest, Forbidden, NotFound
+from werkzeug.utils import redirect
+
+from requests_oauthlib import OAuth2Session
 
 from isso.compat import text_type as str, string_types
 
@@ -406,3 +410,34 @@ class API(object):
 
         th = [self.threads.get(uri) for uri in data]
         return JSON(self.comments.count(*th), 200)
+
+    def auth_signin(self, environ, request, provider):
+        if not provider == 'github':
+            raise BadRequest
+        client_id = self.conf.get("oauth-github", "client_id")
+        auth_url = self.conf.get("oauth-github", "auth_url")
+        github = OAuth2Session(client_id)
+        return redirect(github.authorization_url(auth_url)[0])
+
+    def auth_callback(self, environ, request, provider):
+        if not provider == 'github':
+            raise BadRequest
+        client_id = self.conf.get("oauth-github", "client_id")
+        client_secret = self.conf.get("oauth-github", "client_secret")
+        auth_url = self.conf.get("oauth-github", "auth_url")
+        token_url = self.conf.get("oauth-github", "token_url")
+        request_url = request.url.replace('http://', 'https://')
+
+        github = OAuth2Session(client_id)
+        github.fetch_token(
+            token_url,
+            client_secret=client_secret,
+            authorization_response=request_url
+        )
+        r = json.loads(github.get('https://api.github.com/user').content)
+        signature = self.sign({
+            'username': r["login"]
+        })
+        resp = JSON("Cookie created.", 200)
+        resp.headers.add("Set-Cookie", dump_cookie("auth", signature, 60))
+        return resp
