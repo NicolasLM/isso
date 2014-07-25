@@ -424,6 +424,6 @@ class API(object):
             'website': user_data[2]
         })
         resp = JSON("Cookie created.", 200)
-        max_age = self.conf.get("auth", "max-age")
+        max_age = self.conf.getint("auth", "max-age")
         resp.headers.add("Set-Cookie", dump_cookie("auth", signature, max_age))
         return resp
