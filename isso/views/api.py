@@ -419,8 +419,11 @@ class API(object):
         p = get_provider(self.conf, provider)(self.conf)
         user_data = p.callback(request.url)
         signature = self.sign({
-            'username': user_data[0]
+            'username': user_data[0],
+            'email': user_data[1],
+            'website': user_data[2]
         })
         resp = JSON("Cookie created.", 200)
-        resp.headers.add("Set-Cookie", dump_cookie("auth", signature, 60))
+        max_age = self.conf.get("auth", "max-age")
+        resp.headers.add("Set-Cookie", dump_cookie("auth", signature, max_age))
         return resp

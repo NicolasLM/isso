@@ -33,13 +33,15 @@ class OAuthProvider(object):
         print json.dumps(r, indent=4, separators=(',', ': '))
         user_data = (
             r[self.keys[0]],
+            r.get(self.keys[1]),
+            r.get(self.keys[2]),
         )
         return user_data
 
 class Github(OAuthProvider):
 
     scope = None
-    keys = ('login',)
+    keys = ('login', 'email', 'blog',)
     auth_url = "https://github.com/login/oauth/authorize"
     token_url = "https://github.com/login/oauth/access_token"
     profile_url = "https://api.github.com/user"
@@ -50,7 +52,7 @@ class Google(OAuthProvider):
         "https://www.googleapis.com/auth/userinfo.email",
         "https://www.googleapis.com/auth/userinfo.profile"
     ]
-    keys = ('name',)
+    keys = ('name', 'email', 'none')
     auth_url = "https://accounts.google.com/o/oauth2/auth"
     token_url = "https://accounts.google.com/o/oauth2/token"
     profile_url = "https://www.googleapis.com/oauth2/v1/userinfo"
