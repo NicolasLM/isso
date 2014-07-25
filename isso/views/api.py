@@ -143,6 +143,8 @@ class API(object):
         for field in ("author", "email", "website"):
             if isinstance(data.get(field, None), string_types):
                 data[field] = cgi.escape(data[field])
+                print data[field]
+                print type(data[field])
 
         if isinstance(data.get("website", None), string_types):
             data["website"] = normalize(data["website"])
@@ -418,12 +420,13 @@ class API(object):
     def auth_callback(self, environ, request, provider):
         p = get_provider(self.conf, provider)(self.conf)
         user_data = p.callback(request.url)
-        signature = self.sign({
-            'username': user_data[0],
-            'email': user_data[1],
-            'website': user_data[2]
-        })
+        data = {'username': user_data[0]}
+        if user_data[1]:
+            data['email'] = user_data[1]
+        if user_data[2]:
+            data['website'] = user_data[2]
         resp = JSON("Cookie created.", 200)
         max_age = self.conf.getint("auth", "max-age")
-        resp.headers.add("Set-Cookie", dump_cookie("auth", signature, max_age))
+        resp.headers.add("Set-Cookie",
+                         dump_cookie("auth", self.sign(data), max_age))
         return resp
