@@ -52,6 +52,7 @@ def xhr(func):
 
     return dec
 
+
 def auth(func):
     """A decorator to check the validity of an auth cookie."""
 
@@ -66,6 +67,7 @@ def auth(func):
         return func(self, env, req, *args, **kwargs)
 
     return dec
+
 
 class API(object):
 
