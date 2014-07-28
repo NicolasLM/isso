@@ -6,6 +6,7 @@ define({
     "postbox-submit": "submit",
     "postbox-auth-required": "Authentication required to comment.",
     "postbox-auth-sign-in": "Sign-in",
+    "postbox-auth-sign-out": "Sign-out",
     "postbox-auth-commenting-as": "Commenting as",
 
     "num-comments": "One Comment\n{{ n }} Comments",

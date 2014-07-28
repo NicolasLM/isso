@@ -17,6 +17,7 @@ div(class='isso-postbox')
     if conf.auth
         if cookie.valid
             p=i18n('postbox-auth-commenting-as') + ' ' + cookie.data.username
+                a(href='#{conf["auth-sign-out-url"]}') #{i18n('postbox-auth-sign-out')}
             +form('visibility: hidden;')
         else
             p=i18n('postbox-auth-required')

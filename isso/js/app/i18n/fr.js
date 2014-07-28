@@ -6,6 +6,7 @@ define({
     "postbox-submit": "Soumettre",
     "postbox-auth-required": "Connexion nécessaire pour commenter.",
     "postbox-auth-sign-in": "Se connecter",
+    "postbox-auth-sign-out": "Se déconnecter",
     "postbox-auth-commenting-as": "Commenter en tant que",
 
     "num-comments": "{{ n }} commentaire\n{{ n }} commentaires",
