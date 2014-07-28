@@ -428,3 +428,8 @@ class API(object):
         resp.headers.add("Set-Cookie",
                          dump_cookie("auth", self.sign(data), max_age))
         return resp
+
+    def auth_signout(self, environ, request):
+        resp = JSON("Cookie deleted.", 200)
+        resp.delete_cookie("auth")
+        return resp

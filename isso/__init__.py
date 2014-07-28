@@ -129,6 +129,7 @@ class Isso(object):
         for func, (method, rule) in [
             ('auth_signin',    ('GET', '/auth/signin/<string:provider>')),
             ('auth_callback',    ('GET', '/auth/callback/<string:provider>')),
+            ('auth_signout',    ('GET', '/auth/signout')),
             ('fetch',   ('GET', '/')),
             ('new',     ('POST', '/new')),
             ('count',   ('POST', '/count')),
