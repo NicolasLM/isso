@@ -143,8 +143,6 @@ class API(object):
         for field in ("author", "email", "website"):
             if isinstance(data.get(field, None), string_types):
                 data[field] = cgi.escape(data[field])
-                print data[field]
-                print type(data[field])
 
         if isinstance(data.get("website", None), string_types):
             data["website"] = normalize(data["website"])

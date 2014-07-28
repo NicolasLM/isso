@@ -30,7 +30,6 @@ class OAuthProvider(object):
             authorization_response=request_url
         )
         r = json.loads(self.oauth2.get(self.profile_url).content)
-        print json.dumps(r, indent=4, separators=(',', ': '))
         user_data = (
             r[self.keys[0]],
             r.get(self.keys[1]),
