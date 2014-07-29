@@ -430,6 +430,11 @@ class API(object):
         return resp
 
     def auth_signout(self, environ, request):
-        resp = JSON("Cookie deleted.", 200)
+        if request.referrer:
+            resp = JSON("Cookie deleted.", 301)
+            resp.headers.add("Location", request.referrer)
+        else:
+            resp = JSON("Cookie deleted.", 200)
         resp.delete_cookie("auth")
         return resp
+
