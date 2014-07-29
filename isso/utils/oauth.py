@@ -9,11 +9,13 @@ from requests_oauthlib import OAuth2Session
 
 class OAuthProvider(object):
 
-    def __init__(self, conf):
+    def __init__(self, conf, request_url):
         provider = type(self).__name__.lower()
         self.client_id = conf.get("oauth-" + provider, "client_id")
         self.client_secret = conf.get("oauth-" + provider, "client_secret")
-        self.redirect_uri = 'http://localhost:8080/auth/callback/' + provider
+        self.request_url = request_url
+        self.redirect_uri = request_url.split('/auth')[0] + \
+                            '/auth/callback/' + provider
         self.oauth2 = OAuth2Session(self.client_id,
                                     scope=self.scope,
                                     redirect_uri=self.redirect_uri)
@@ -22,8 +24,8 @@ class OAuthProvider(object):
                                              access_type="offline",
                                              approval_prompt="force")[0]
 
-    def callback(self, request_url):
-        request_url = request_url.replace('http://', 'https://')
+    def callback(self):
+        request_url = self.request_url.replace('http://', 'https://')
         self.oauth2.fetch_token(
             self.token_url,
             client_secret=self.client_secret,

@@ -412,12 +412,12 @@ class API(object):
         return JSON(self.comments.count(*th), 200)
 
     def auth_signin(self, environ, request, provider):
-        p = get_provider(self.conf, provider)(self.conf)
+        p = get_provider(self.conf, provider)(self.conf, request.url)
         return redirect(p.signin())
 
     def auth_callback(self, environ, request, provider):
-        p = get_provider(self.conf, provider)(self.conf)
-        user_data = p.callback(request.url)
+        p = get_provider(self.conf, provider)(self.conf, request.url)
+        user_data = p.callback()
         data = {'username': user_data[0]}
         if user_data[1]:
             data['email'] = user_data[1]
